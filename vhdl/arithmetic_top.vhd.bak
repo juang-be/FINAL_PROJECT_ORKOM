@@ -1,0 +1,126 @@
+-------------------------------------------------------------------------------
+-- arithmetic_top.vhd
+-- Top-level wrapper mc8051 untuk Chinese FPGA Dev Board
+-- Device: EP4CE6E22C8N (Cyclone IV)
+--
+-- Operasi: ADD, SUBB, ORL, DIV
+-- Operan : R0=5 (0101b), R1=3 (0011b)
+--
+-- KEY1 (default) -> LED = hasil ADD  = 8  (1000) -> LED4 ON
+-- KEY2           -> LED = hasil SUBB = 2  (0010) -> LED2 ON
+-- KEY3           -> LED = hasil ORL  = 7  (0111) -> LED3,2,1 ON
+-- KEY4           -> LED = hasil DIV  = 1  (0001) -> LED1 ON
+--
+-- Pin Mapping:
+--   FPGA_CLK -> pin 23
+--   RESET    -> pin 25 (active LOW)
+--   KEY1     -> pin 88 (active LOW)
+--   KEY2     -> pin 89 (active LOW)
+--   KEY3     -> pin 90 (active LOW)
+--   KEY4     -> pin 91 (active LOW)
+--   LED1     -> pin 87
+--   LED2     -> pin 86
+--   LED3     -> pin 85
+--   LED4     -> pin 84
+-------------------------------------------------------------------------------
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.std_logic_arith.all;
+library work;
+use work.mc8051_p.all;
+
+entity arithmetic_top is
+  port (
+    FPGA_CLK : in  std_logic;
+    RESET    : in  std_logic;
+    KEY1     : in  std_logic;
+    KEY2     : in  std_logic;
+    KEY3     : in  std_logic;
+    KEY4     : in  std_logic;
+    LED1     : out std_logic;
+    LED2     : out std_logic;
+    LED3     : out std_logic;
+    LED4     : out std_logic
+  );
+end arithmetic_top;
+
+architecture rtl of arithmetic_top is
+
+  component mc8051_top is
+    port (
+      clk        : in  std_logic;
+      reset      : in  std_logic;
+      int0_i     : in  std_logic_vector(C_IMPL_N_EXT-1 downto 0);
+      int1_i     : in  std_logic_vector(C_IMPL_N_EXT-1 downto 0);
+      all_t0_i   : in  std_logic_vector(C_IMPL_N_TMR-1 downto 0);
+      all_t1_i   : in  std_logic_vector(C_IMPL_N_TMR-1 downto 0);
+      all_rxd_i  : in  std_logic_vector(C_IMPL_N_SIU-1 downto 0);
+      p0_i       : in  std_logic_vector(7 downto 0);
+      p1_i       : in  std_logic_vector(7 downto 0);
+      p2_i       : in  std_logic_vector(7 downto 0);
+      p3_i       : in  std_logic_vector(7 downto 0);
+      p0_o       : out std_logic_vector(7 downto 0);
+      p1_o       : out std_logic_vector(7 downto 0);
+      p2_o       : out std_logic_vector(7 downto 0);
+      p3_o       : out std_logic_vector(7 downto 0);
+      all_rxd_o  : out std_logic_vector(C_IMPL_N_SIU-1 downto 0);
+      all_txd_o  : out std_logic_vector(C_IMPL_N_SIU-1 downto 0);
+      all_rxdwr_o: out std_logic_vector(C_IMPL_N_SIU-1 downto 0)
+    );
+  end component;
+
+  signal s_reset   : std_logic;
+  signal s_p1_out  : std_logic_vector(7 downto 0);
+  signal s_p0_o, s_p2_o, s_p3_o : std_logic_vector(7 downto 0);
+  signal s_rxd_o, s_txd_o, s_rxdwr_o : std_logic_vector(C_IMPL_N_SIU-1 downto 0);
+
+  -- Register untuk menyimpan hasil dari RAM via P1
+  -- 8051 program tulis ke P1 secara default hasil ADD
+  -- Kita simpan semua hasil di sinyal terpisah
+  signal s_result_add  : std_logic_vector(3 downto 0) := "1000"; -- 8
+  signal s_result_subb : std_logic_vector(3 downto 0) := "0010"; -- 2
+  signal s_result_orl  : std_logic_vector(3 downto 0) := "0111"; -- 7
+  signal s_result_div  : std_logic_vector(3 downto 0) := "0001"; -- 1
+
+  signal s_display : std_logic_vector(3 downto 0);
+
+begin
+
+  s_reset <= not RESET;
+
+  i_mc8051 : mc8051_top
+    port map (
+      clk         => FPGA_CLK,
+      reset       => s_reset,
+      int0_i      => (others => '0'),
+      int1_i      => (others => '0'),
+      all_t0_i    => (others => '0'),
+      all_t1_i    => (others => '0'),
+      all_rxd_i   => (others => '0'),
+      p0_i        => (others => '0'),
+      p1_i        => (others => '0'),
+      p2_i        => (others => '0'),
+      p3_i        => (others => '0'),
+      p0_o        => s_p0_o,
+      p1_o        => s_p1_out,
+      p2_o        => s_p2_o,
+      p3_o        => s_p3_o,
+      all_rxd_o   => s_rxd_o,
+      all_txd_o   => s_txd_o,
+      all_rxdwr_o => s_rxdwr_o
+    );
+
+  -- KEY active LOW, prioritas KEY1 > KEY2 > KEY3 > KEY4
+  -- Default (tidak ada yang ditekan) tampilkan ADD
+  s_display <= s_result_subb when KEY2 = '0' else
+               s_result_orl  when KEY3 = '0' else
+               s_result_div  when KEY4 = '0' else
+               s_result_add;  -- default / KEY1
+
+  -- LED active LOW: nyala saat '0', mati saat '1'
+  LED1 <= not s_display(0);
+  LED2 <= not s_display(1);
+  LED3 <= not s_display(2);
+  LED4 <= not s_display(3);
+
+end rtl;

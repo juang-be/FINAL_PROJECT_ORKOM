@@ -1,0 +1,322 @@
+// Copyright (C) 2025  Altera Corporation. All rights reserved.
+// Your use of Altera Corporation's design tools, logic functions 
+// and other software and tools, and any partner logic 
+// functions, and any output files from any of the foregoing 
+// (including device programming or simulation files), and any 
+// associated documentation or information are expressly subject 
+// to the terms and conditions of the Altera Program License 
+// Subscription Agreement, the Altera Quartus Prime License Agreement,
+// the Altera IP License Agreement, or other applicable license
+// agreement, including, without limitation, that your use is for
+// the sole purpose of programming logic devices manufactured by
+// Altera and sold by Altera or its authorized distributors.  Please
+// refer to the Altera Software License Subscription Agreements 
+// on the Quartus Prime software download page.
+
+// VENDOR "Altera"
+// PROGRAM "Quartus Prime"
+// VERSION "Version 25.1std.0 Build 1129 10/21/2025 SC Lite Edition"
+
+// DATE "06/06/2026 10:43:15"
+
+// 
+// Device: Altera EP4CE6E22C8 Package TQFP144
+// 
+
+// 
+// This Verilog file should be used for Questa Altera FPGA (Verilog) only
+// 
+
+`timescale 1 ps/ 1 ps
+
+module arithmetic_top (
+	FPGA_CLK,
+	RESET,
+	KEY1,
+	KEY2,
+	KEY3,
+	KEY4,
+	LED1,
+	LED2,
+	LED3,
+	LED4);
+input 	FPGA_CLK;
+input 	RESET;
+input 	KEY1;
+input 	KEY2;
+input 	KEY3;
+input 	KEY4;
+output 	LED1;
+output 	LED2;
+output 	LED3;
+output 	LED4;
+
+// Design Ports Information
+// KEY1	=>  Location: PIN_88,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: Default
+// LED1	=>  Location: PIN_87,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: 8mA
+// LED2	=>  Location: PIN_86,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: 8mA
+// LED3	=>  Location: PIN_85,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: 8mA
+// LED4	=>  Location: PIN_84,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: 8mA
+// RESET	=>  Location: PIN_25,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: Default
+// FPGA_CLK	=>  Location: PIN_23,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: Default
+// KEY2	=>  Location: PIN_89,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: Default
+// KEY3	=>  Location: PIN_90,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: Default
+// KEY4	=>  Location: PIN_91,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: Default
+
+
+wire gnd;
+wire vcc;
+wire unknown;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+assign unknown = 1'bx;
+
+tri1 devclrn;
+tri1 devpor;
+tri1 devoe;
+wire \KEY1~input_o ;
+wire \RESET~input_o ;
+wire \FPGA_CLK~input_o ;
+wire \LED1~output_o ;
+wire \LED2~output_o ;
+wire \LED3~output_o ;
+wire \LED4~output_o ;
+wire \KEY4~input_o ;
+wire \KEY2~input_o ;
+wire \KEY3~input_o ;
+wire \s_display[0]~0_combout ;
+wire \s_display[0]~1_combout ;
+wire \s_display[2]~2_combout ;
+wire \s_display[3]~3_combout ;
+
+
+hard_block auto_generated_inst(
+	.devpor(devpor),
+	.devclrn(devclrn),
+	.devoe(devoe));
+
+// Location: IOOBUF_X34_Y10_N9
+cycloneive_io_obuf \LED1~output (
+	.i(!\s_display[0]~0_combout ),
+	.oe(vcc),
+	.seriesterminationcontrol(16'b0000000000000000),
+	.devoe(devoe),
+	.o(\LED1~output_o ),
+	.obar());
+// synopsys translate_off
+defparam \LED1~output .bus_hold = "false";
+defparam \LED1~output .open_drain_output = "false";
+// synopsys translate_on
+
+// Location: IOOBUF_X34_Y9_N2
+cycloneive_io_obuf \LED2~output (
+	.i(\s_display[0]~1_combout ),
+	.oe(vcc),
+	.seriesterminationcontrol(16'b0000000000000000),
+	.devoe(devoe),
+	.o(\LED2~output_o ),
+	.obar());
+// synopsys translate_off
+defparam \LED2~output .bus_hold = "false";
+defparam \LED2~output .open_drain_output = "false";
+// synopsys translate_on
+
+// Location: IOOBUF_X34_Y9_N9
+cycloneive_io_obuf \LED3~output (
+	.i(\s_display[2]~2_combout ),
+	.oe(vcc),
+	.seriesterminationcontrol(16'b0000000000000000),
+	.devoe(devoe),
+	.o(\LED3~output_o ),
+	.obar());
+// synopsys translate_off
+defparam \LED3~output .bus_hold = "false";
+defparam \LED3~output .open_drain_output = "false";
+// synopsys translate_on
+
+// Location: IOOBUF_X34_Y9_N16
+cycloneive_io_obuf \LED4~output (
+	.i(!\s_display[3]~3_combout ),
+	.oe(vcc),
+	.seriesterminationcontrol(16'b0000000000000000),
+	.devoe(devoe),
+	.o(\LED4~output_o ),
+	.obar());
+// synopsys translate_off
+defparam \LED4~output .bus_hold = "false";
+defparam \LED4~output .open_drain_output = "false";
+// synopsys translate_on
+
+// Location: IOIBUF_X34_Y12_N1
+cycloneive_io_ibuf \KEY4~input (
+	.i(KEY4),
+	.ibar(gnd),
+	.o(\KEY4~input_o ));
+// synopsys translate_off
+defparam \KEY4~input .bus_hold = "false";
+defparam \KEY4~input .simulate_z_as = "z";
+// synopsys translate_on
+
+// Location: IOIBUF_X34_Y12_N15
+cycloneive_io_ibuf \KEY2~input (
+	.i(KEY2),
+	.ibar(gnd),
+	.o(\KEY2~input_o ));
+// synopsys translate_off
+defparam \KEY2~input .bus_hold = "false";
+defparam \KEY2~input .simulate_z_as = "z";
+// synopsys translate_on
+
+// Location: IOIBUF_X34_Y12_N8
+cycloneive_io_ibuf \KEY3~input (
+	.i(KEY3),
+	.ibar(gnd),
+	.o(\KEY3~input_o ));
+// synopsys translate_off
+defparam \KEY3~input .bus_hold = "false";
+defparam \KEY3~input .simulate_z_as = "z";
+// synopsys translate_on
+
+// Location: LCCOMB_X31_Y13_N0
+cycloneive_lcell_comb \s_display[0]~0 (
+// Equation(s):
+// \s_display[0]~0_combout  = (\KEY2~input_o  & ((!\KEY3~input_o ) # (!\KEY4~input_o )))
+
+	.dataa(\KEY4~input_o ),
+	.datab(gnd),
+	.datac(\KEY2~input_o ),
+	.datad(\KEY3~input_o ),
+	.cin(gnd),
+	.combout(\s_display[0]~0_combout ),
+	.cout());
+// synopsys translate_off
+defparam \s_display[0]~0 .lut_mask = 16'h50F0;
+defparam \s_display[0]~0 .sum_lutc_input = "datac";
+// synopsys translate_on
+
+// Location: LCCOMB_X31_Y13_N10
+cycloneive_lcell_comb \s_display[0]~1 (
+// Equation(s):
+// \s_display[0]~1_combout  = (\KEY2~input_o  & \KEY3~input_o )
+
+	.dataa(gnd),
+	.datab(gnd),
+	.datac(\KEY2~input_o ),
+	.datad(\KEY3~input_o ),
+	.cin(gnd),
+	.combout(\s_display[0]~1_combout ),
+	.cout());
+// synopsys translate_off
+defparam \s_display[0]~1 .lut_mask = 16'hF000;
+defparam \s_display[0]~1 .sum_lutc_input = "datac";
+// synopsys translate_on
+
+// Location: LCCOMB_X31_Y13_N12
+cycloneive_lcell_comb \s_display[2]~2 (
+// Equation(s):
+// \s_display[2]~2_combout  = (\KEY3~input_o ) # (!\KEY2~input_o )
+
+	.dataa(gnd),
+	.datab(gnd),
+	.datac(\KEY2~input_o ),
+	.datad(\KEY3~input_o ),
+	.cin(gnd),
+	.combout(\s_display[2]~2_combout ),
+	.cout());
+// synopsys translate_off
+defparam \s_display[2]~2 .lut_mask = 16'hFF0F;
+defparam \s_display[2]~2 .sum_lutc_input = "datac";
+// synopsys translate_on
+
+// Location: LCCOMB_X31_Y13_N6
+cycloneive_lcell_comb \s_display[3]~3 (
+// Equation(s):
+// \s_display[3]~3_combout  = (\KEY4~input_o  & (\KEY2~input_o  & \KEY3~input_o ))
+
+	.dataa(\KEY4~input_o ),
+	.datab(gnd),
+	.datac(\KEY2~input_o ),
+	.datad(\KEY3~input_o ),
+	.cin(gnd),
+	.combout(\s_display[3]~3_combout ),
+	.cout());
+// synopsys translate_off
+defparam \s_display[3]~3 .lut_mask = 16'hA000;
+defparam \s_display[3]~3 .sum_lutc_input = "datac";
+// synopsys translate_on
+
+// Location: IOIBUF_X34_Y12_N22
+cycloneive_io_ibuf \KEY1~input (
+	.i(KEY1),
+	.ibar(gnd),
+	.o(\KEY1~input_o ));
+// synopsys translate_off
+defparam \KEY1~input .bus_hold = "false";
+defparam \KEY1~input .simulate_z_as = "z";
+// synopsys translate_on
+
+// Location: IOIBUF_X0_Y11_N22
+cycloneive_io_ibuf \RESET~input (
+	.i(RESET),
+	.ibar(gnd),
+	.o(\RESET~input_o ));
+// synopsys translate_off
+defparam \RESET~input .bus_hold = "false";
+defparam \RESET~input .simulate_z_as = "z";
+// synopsys translate_on
+
+// Location: IOIBUF_X0_Y11_N8
+cycloneive_io_ibuf \FPGA_CLK~input (
+	.i(FPGA_CLK),
+	.ibar(gnd),
+	.o(\FPGA_CLK~input_o ));
+// synopsys translate_off
+defparam \FPGA_CLK~input .bus_hold = "false";
+defparam \FPGA_CLK~input .simulate_z_as = "z";
+// synopsys translate_on
+
+assign LED1 = \LED1~output_o ;
+
+assign LED2 = \LED2~output_o ;
+
+assign LED3 = \LED3~output_o ;
+
+assign LED4 = \LED4~output_o ;
+
+endmodule
+
+module hard_block (
+
+	devpor,
+	devclrn,
+	devoe);
+
+// Design Ports Information
+// ~ALTERA_ASDO_DATA1~	=>  Location: PIN_6,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: Default
+// ~ALTERA_FLASH_nCE_nCSO~	=>  Location: PIN_8,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: Default
+// ~ALTERA_DCLK~	=>  Location: PIN_12,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: Default
+// ~ALTERA_DATA0~	=>  Location: PIN_13,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: Default
+// ~ALTERA_nCEO~	=>  Location: PIN_101,	 I/O Standard: 3.3-V LVTTL,	 Current Strength: 8mA
+
+input 	devpor;
+input 	devclrn;
+input 	devoe;
+
+wire gnd;
+wire vcc;
+wire unknown;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+assign unknown = 1'bx;
+
+wire \~ALTERA_ASDO_DATA1~~padout ;
+wire \~ALTERA_FLASH_nCE_nCSO~~padout ;
+wire \~ALTERA_DATA0~~padout ;
+wire \~ALTERA_ASDO_DATA1~~ibuf_o ;
+wire \~ALTERA_FLASH_nCE_nCSO~~ibuf_o ;
+wire \~ALTERA_DATA0~~ibuf_o ;
+
+
+endmodule
